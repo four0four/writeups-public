@@ -75,7 +75,7 @@ but this ctf code). Once this was nearly working locally, I opened the challenge
 Not sure if this was added, or I just can't read - regardless, this ended up being a lot simpler. Anyway - enough with that.
 
 I wrote a quick bit of python to calculate the saved RIP overwrite depth, finally got a libc, and set about writing an incredibly simple ROP/ret2libc chain.
-Testing it locally in strace worked beautifully...except where system() had no desire to listen on the socket's fd. Oops. Add a few jumps to dup2(3, *)...Also nothing.
+Testing it locally in strace worked beautifully...except where system() had no desire to listen on the socket's fd. Oops. Add a few jumps to ```dup2(3, *)```...Also nothing.
 Change system() to a direct int 0x80/execve. Nothing. Change execve to libc exec{v, ve, p}. Nothing. I returned to my script, polished out a bug where it 
 sometimes accepted a binary without enough space to store the ropchain, and repeated the above. Goto 10. 
 
@@ -83,7 +83,7 @@ If you've exploited binaries that don't redirect their own stdin/stdout over a s
 long it took me to figure this out, but eventually a teammate pointed out there was likely a script starting/managing these binaries, and that I should
 maybe try a fd other than 3, and that 6 was a pretty reasonable starting guess. First run, it dropped a shell. Phew. Excuse the stupid picture:
 
-![I've never actually done this before D:](img/pwn350-screenshots-are-hard.png]
+![I've never actually done this before D:](img/pwn350-screenshots-are-hard.png)
 
 Exploit script is every so slightly cleaned up and provided as pwn350-autobots-autopwn.py
 
