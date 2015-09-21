@@ -1,5 +1,5 @@
 I've got a bit of a soft spot, so when I saw this
-[woo](img/rev200-woo6502.png)
+![woo](img/rev200-woo6502.png)
 in the first RE challenge, I immediately picked it up.
 
 The first order of business was to hunt down an IDA loader (one exists!), and I stumbled upon the excellent
@@ -14,18 +14,18 @@ in reversing the 6502 disassembly, they may be helpful in following along. Enoug
 Running through the ROM (turbo speed ftw), I ran into a fake "buffer overflow", which wasn't relevant at all. The fun begins when you need to find a 
 password to unlock a time...lock...thing: 
 
-[wat](img/rev200-realbeginning.png)
+![wat](img/rev200-realbeginning.png)
 
 I found the hash/auth routine by searching memory for my password (used a bunch of 0x41 per tradition during the CTF, it was easy to spot at addr 
-0x005). [pass!](img/rev200-pass_in_ram.png). [breaks](img/rev200-breakpoints.png)
+0x005). ![pass!](img/rev200-pass_in_ram.png). ![breaks](img/rev200-breakpoints.png)
 
 A few read breakpoints later and I've got a good idea of what's going on. Breaking on the return and flipping the result stored in the A register
 was tempting - and worked!
 
-...Sort of: [aww](img/rev200-oh.png). 
+...Sort of: ![aww](img/rev200-oh.png). 
 
 At this point, I just implemented a tiny subset of 6502 in python, didn't worry about simplifying anything, and bruteforced the key. The script is in this
 repo, along with some more images of the process. Here's the output:
-[woot](img/rev200-successful_crack.png)
+![woot](img/rev200-successful_crack.png)
 
 The flag is NOHACK4UXWRATHOFKFUHRERX :)
