@@ -30,8 +30,44 @@ was tempting - and worked!
 
 ![aww](img/rev200-oh.png). 
 
-At this point, I just implemented a tiny subset of 6502 in python, didn't worry about simplifying anything, and bruteforced the key. The script is in this
-repo, along with some more images of the process. Here's the output:
+No flag for the easy route.
+
+At this point, I just implemented a tiny subset of 6502 in python:
+
+```python
+def ROL_b(b):
+  return ((int(b)<<1) | ((b&0x80)>>7)) & 0xFF
+
+def ROR_b(b):
+  return ((b>>1) | ((b&1) << 7)) & 0xFF
+
+def ROR():
+  global A
+  A = ROR_b(A)
+
+def ROL():
+  global A
+  A = ROL_b(A)
+
+def TAX():
+  global X
+  X = A
+
+def TXA():
+  global X
+  A = X
+
+def PHA():
+  global A
+  stack.append(A)
+
+def PLA():
+  global A
+```
+
+I didn't really worry about simplifying anything, and just bruteforced the key (each byte was independent of the previous states, so this was very fast).
+Points of note include a few arrays of magic values used to validate the key, they were found just by inspection/more breakpoints. 
+The script is in this repo, along with some more images of the process. Here's the output:
 
 ![woot](img/rev200-successful_crack.png)
 
