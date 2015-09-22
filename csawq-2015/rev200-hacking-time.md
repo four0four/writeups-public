@@ -1,4 +1,4 @@
-I've got a bit of a soft spot, so when I saw this
+I've got a bit of a soft spot for odd/non-x86 challenges, so when I saw this
 
 ![woo](img/rev200-woo6502.png)
 
@@ -66,7 +66,7 @@ def PLA():
 ```
 
 I didn't really worry about simplifying anything, and just bruteforced the key (each byte was independent of the previous states, so this was very fast).
-Points of note include a few arrays of magic values used to validate the key, they were found just by inspection/more breakpoints. 
+Points of note include extracting a few arrays of magic values used to validate the key, these were found by further runtime inspection/more breakpoints. 
 The script is in this repo, along with some more images of the process. Here's the output:
 
 ![woot](img/rev200-successful_crack.png)

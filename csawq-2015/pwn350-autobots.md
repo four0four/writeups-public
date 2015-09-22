@@ -70,18 +70,19 @@ efficiency wasn't at a high point.
 Now, testing my initial hunch that the server was dumping the ELF and then running it was correct - I could even play around with overwrite lengths and 
 find what seemed to be libc addresses, cool! Thinking I had to circumvent both ASLR and DEP, I set about testing attempting to leak relevant addresses
 by calculating the saved RIP pointer's offset into the stack, overwriting it with an address higher in the executeable (no PIE, woo!) which resulted in
-another series of read(), write() calls. I planned to increment the overwrite *beyond* the pointer by a byte each time (yeah, could've done it by len(leak), 
+another series of ```read()```, ```write()``` calls. I planned to increment the overwrite *beyond* the pointer by a byte each time (yeah, could've done it by len(leak), 
 but this ctf code). Once this was nearly working locally, I opened the challenge page again - "Note: Aslr has now been disabled for this challenge". 
 Not sure if this was added, or I just can't read - regardless, this ended up being a lot simpler. Anyway - enough with that.
 
 I wrote a quick bit of python to calculate the saved RIP overwrite depth, finally got a libc, and set about writing an incredibly simple ROP/ret2libc chain.
-Testing it locally in strace worked beautifully...except where system() had no desire to listen on the socket's fd. Oops. Add a few jumps to ```dup2(3, *)```...Also nothing.
-Change system() to a direct int 0x80/execve. Nothing. Change execve to libc exec{v, ve, p}. Nothing. I returned to my script, polished out a bug where it 
-sometimes accepted a binary without enough space to store the ropchain, and repeated the above. Goto 10. 
+Testing it locally in strace worked beautifully...except where ```system()``` had no desire to listen on the socket's fd. Oops. Add a few jumps to ```dup2(3, *)```...Also nothing.
+Change ```system()``` to a direct int 0x80/execve. Nothing. Change ```execve``` to libc exec{v, ve, p}. Nothing. I returned to my script, polished out a bug where it 
+sometimes accepted a binary without enough space to store the ropchain, and repeated the above. 20 goto 10. 
 
 If you've exploited binaries that don't redirect their own stdin/stdout over a socket, you may see what's wrong here. I'm not going to publically admit how
 long it took me to figure this out, but eventually a teammate pointed out there was likely a script starting/managing these binaries, and that I should
-maybe try a fd other than 3, and that 6 was a pretty reasonable starting guess. First run, it dropped a shell. Phew. Excuse the stupid picture:
+maybe try a fd other than 3, and that 6 was a pretty reasonable starting guess. In hindsight, another solution is to start up a netcat instance through ```system()``` instead of bash.
+Regardless, first run and it dropped a shell. Phew. Excuse the stupid picture:
 
 ![I've never actually done this before D:](img/pwn350-screenshots-are-hard.png)
 
