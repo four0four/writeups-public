@@ -63,6 +63,7 @@ def PHA():
 
 def PLA():
   global A
+  A = stack.pop()
 ```
 
 I didn't really worry about simplifying anything, and just bruteforced the key (each byte was independent of the previous states, so this was very fast).
